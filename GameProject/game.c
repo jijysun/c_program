@@ -33,7 +33,7 @@ struct player {
 	};
 };
 
-int day = 0, explo, exploTime=0, exploExit=0, exploMap;
+int day = 0, explo, exploTime=0, exploExit=0, exploMap, exploday, beforeExplo;
 int before = 0; // 이전 이벤트와 겹치는 지 확인해주는 변수
 int event[3] = { 0 }; // 진엔딩 이벤트용 변수
 int eventTurn = 0; // 진엔딩 이벤트 진행 변수
@@ -348,53 +348,58 @@ void exploration() {
 
 	// 탐사 종료시
 	if (exploExit == 1) {
-		exploExit = 0;
+		exploExit =0;
+		beforeExplo = explo;
 
 		switch (explo) {
 			case 1:
-				printf("드디어 아빠가 길고 험난했던 탐사를 마치고 돌아왔다\n");
+				printf("드디어 아빠가 %d만에 길고 험난했던 탐사를 마치고 돌아왔다\n", exploday);
+				player.dad[3] = -5;
 				break;
 			case 2:
-				printf("드디어 엄마가 길고 험난했던 탐사를 마치고 돌아왔다\n");
+				printf("드디어 엄마가 %d만에 길고 험난했던 탐사를 마치고 돌아왔다\n", exploday);
+				player.mom[3] = -5;
 				break;
 			case 3:
-				printf("드디어 아들이 길고 험난했던 탐사를 마치고 돌아왔다\n");
+				printf("드디어 아들이 %d만에 길고 험난했던 탐사를 마치고 돌아왔다\n", exploday);
+				player.son[3] = -5;
 				break;
 			case 4:
-				printf("드디어 딸이 길고 험난했던 탐사를 마치고 돌아왔다\n");
+				printf("드디어 딸이 %d만에 길고 험난했던 탐사를 마치고 돌아왔다\n", exploday);
+				player.dau[3] = -5;
 				break;
 			}
 		// 탐사 갔다온 장소에 대한 멘트
 		switch (random) {
 			case 0:
-				printf("이번에는 학교\n");
+				printf("학교 방문\n");
 				break;
 			case 1:
-				printf("이번에는 공사장 이었던 곳\n");
+				printf("공사장 방문\n");
 				break;
 			case 2:
-				printf("주택가\n");
+				printf("주택가 방문\n");
 				break;
 			case 3:
-				printf("병원\n");
+				printf("병원 방문\n");
 				break;
 			case 4:
-				printf("마트\n");
+				printf("마트 방문\n");
 				break;
 			case 5:
-				printf("식당가\n");
+				printf("식당가 방문\n");
 				break;
 			case 6:
-				printf("지하철\n");
+				printf("지하철 방문\n");
 				break;
 			case 7:
-				printf("도서관\n");
+				printf("도서관 방문\n");
 				break;
 			case 8:
-				printf("아파트\n");
+				printf("아파트 방문\n");
 				break;
 			case 9:
-				printf("미지정 장소\n");
+				printf("미지정 장소 방문\n");
 				break;
 			}
 
@@ -504,7 +509,7 @@ void exploration() {
 		explo = 0;
 		return;
 	}
-
+	
 	// 탐사 질문
 	if (exploTime == 0) {
 		if ( day >= 4 || day < 10 ) {
@@ -688,15 +693,21 @@ void exploration() {
 
 		// 랜덤 탐사 기간
 		exploTime = rand() % 3;
-		if (exploTime == 0) {
+		switch (exploTime) {
+		case 0:
 			exploTime = 3;
-		}
-		else if (exploTime == 1) {
+			exploday = 3;
+			break;
+		case 1:
 			exploTime = 4;
-		}
-		else {
+			exploday = 4;
+			break;
+		case 2:
 			exploTime = 5;
+			exploday = 5;
+			break;
 		}
+
 	}
 	else {
 		printf("지금은 ");
@@ -719,6 +730,7 @@ void exploration() {
 		 }
 		exploTime--;
 	}
+	printf("\n");
 }
 
 void mainStatus() {
@@ -740,7 +752,7 @@ void mainStatus() {
 		dau_status();
 		break;
 	case 1:
-		printf("아빠: 탐사\n");
+		printf("아빠: 탐사");
 		printf("\n―――――――――――\n");
 		mom_status();
 		son_status();
@@ -748,7 +760,7 @@ void mainStatus() {
 		break;
 	case 2:
 		dad_status();
-		printf("엄마: 탐사\n");
+		printf("엄마: 탐사");
 		printf("\n―――――――――――\n");
 		son_status();
 		dau_status();
@@ -756,7 +768,7 @@ void mainStatus() {
 	case 3:
 		dad_status();
 		mom_status();
-		printf("아들: 탐사\n");
+		printf("아들: 탐사");
 		printf("\n―――――――――――\n");
 		dau_status();
 		break;
@@ -764,7 +776,7 @@ void mainStatus() {
 		dad_status();
 		mom_status();
 		son_status();
-		printf("딸: 탐사\n");
+		printf("딸: 탐사");
 		printf("\n―――――――――――\n");
 		break;
 	}
@@ -820,8 +832,7 @@ void dad_status() {
 	}
 
 
-
-	if (player.dad[3] == -1) {
+	if (player.dad[3] <0) {
 		printf("지침 ");
 	}
 
@@ -865,7 +876,7 @@ void mom_status() {
 		printf("착란 ");
 	}
 
-	if (player.mom[3] == -1) {
+	if (player.mom[3] <0) {
 		printf("지침 ");
 	}
 
@@ -908,7 +919,7 @@ void son_status() {
 		printf("착란 ");
 	}
 
-	if (player.son[3] == -1) {
+	if (player.son[3] <0) {
 		printf("지침 ");
 	}
 
@@ -951,7 +962,7 @@ void dau_status() {
 		printf("착란 ");
 	}
 
-	 if (player.dau[3] == -1) {
+	 if (player.dau[3] < 0) {
 		printf("지침 ");
 	}
 
