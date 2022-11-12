@@ -1,0 +1,6 @@
+﻿  game.c
+D:\Visual Studio\GameProject\GameProject\game.c(87,8): warning C4244: '함수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Visual Studio\GameProject\GameProject\game.c(1856,6): warning C4101: 'i' :참조되지 않은 지역 변수입니다.
+D:\Visual Studio\GameProject\GameProject\game.c(2329,13): warning C4098: 'agentEvent': 'void' 함수에서 값을 반환하고 있습니다.
+D:\Visual Studio\GameProject\GameProject\game.c(2665,13): warning C4098: 'twinEvent': 'void' 함수에서 값을 반환하고 있습니다.
+  GameProject.vcxproj -> D:\Visual Studio\GameProject\x64\Debug\GameProject.exe
